@@ -99,7 +99,7 @@ export default function winstonLogger(verbosity: keyof typeof levels, context: E
     format: combine(
       format.splat(),
       timestamp(),
-      printf((info) => {
+      printf((info: any) => {
         const message = `${info.timestamp} - ${info.level}: ${info.message}`;
         const data = {
           ...info,

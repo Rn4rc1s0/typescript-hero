@@ -1,7 +1,7 @@
 {
   "name": "typescript-hero",
   "displayName": "TypeScript Hero",
-  "description": "Import organizer for typescript",
+  "description": "Additional toolings for typescript",
   "icon": "etc/icon.png",
   "galleryBanner": {
     "color": "#1e324c",

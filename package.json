@@ -1,7 +1,7 @@
 {
   "name": "typescript-hero",
   "displayName": "TypeScript Hero",
-  "description": "Additional tooling for the typescript language",
+  "description": "Import organizer for typescript",
   "icon": "etc/icon.png",
   "galleryBanner": {
     "color": "#1e324c",
@@ -15,8 +15,8 @@
     "npm": ">=5.3.0"
   },
   "categories": [
-    "Other",
-    "Languages"
+    "Formatters",
+    "Programming Languages"
   ],
   "main": "./out/src/extension",
   "author": "Christoph Bühler <christoph.buehler@bluewin.ch>",

@@ -1,7 +1,7 @@
 import { ExternalModuleImport, Import, NamedImport, NamespaceImport, Resource, StringImport } from 'typescript-parser';
 import { ExtensionContext, TreeItemCollapsibleState } from 'vscode';
 
-import BaseStructureTreeItem from './base-structure-tree-item';
+import { BaseStructureTreeItem } from './base-structure-tree-item';
 
 /**
  * Import specifier tree item that represents a specific (named) import of an import statement.

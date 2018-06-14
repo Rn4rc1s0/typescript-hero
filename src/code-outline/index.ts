@@ -6,7 +6,6 @@ import {
   Event,
   EventEmitter,
   ExtensionContext,
-  ProviderResult,
   Selection,
   TextEditorRevealType,
   TreeDataProvider,
@@ -19,22 +18,22 @@ import Configuration from '../configuration';
 import iocSymbols from '../ioc-symbols';
 import { Logger } from '../utilities/logger';
 import { getScriptKind } from '../utilities/utility-functions';
-import BaseStructureTreeItem from './base-structure-tree-item';
-import DeclarationStructureTreeItem from './declaration-structure-tree-item';
-import DisabledStructureTreeItem from './disabled-structure-tree-item';
+import { BaseStructureTreeItem } from './base-structure-tree-item';
+import { DeclarationStructureTreeItem } from './declaration-structure-tree-item';
+import { DisabledStructureTreeItem } from './disabled-structure-tree-item';
 import { ImportsStructureTreeItem } from './imports-structure-tree-item';
-import NotParseableStructureTreeItem from './not-parseable-structure-tree-item';
-import ResourceStructureTreeItem from './resource-structure-tree-item';
+import { NotParseableStructureTreeItem } from './not-parseable-structure-tree-item';
+import { ResourceStructureTreeItem } from './resource-structure-tree-item';
 
 @injectable()
 export default class CodeOutline implements Activatable, TreeDataProvider<BaseStructureTreeItem> {
-  private _onDidChangeTreeData: EventEmitter<BaseStructureTreeItem | undefined>;
+  private _onDidChangeTreeData: EventEmitter<BaseStructureTreeItem | undefined> | undefined;
 
   private disposables: Disposable[] = [];
   private documentCache?: File;
 
-  public get onDidChangeTreeData(): Event<BaseStructureTreeItem | undefined> {
-    return this._onDidChangeTreeData.event;
+  public get onDidChangeTreeData(): Event<BaseStructureTreeItem | undefined> | undefined {
+    return this._onDidChangeTreeData ? this._onDidChangeTreeData.event : undefined;
   }
 
   constructor(
@@ -96,7 +95,7 @@ export default class CodeOutline implements Activatable, TreeDataProvider<BaseSt
     return element;
   }
 
-  public async getChildren(element?: BaseStructureTreeItem): Promise<ProviderResult<BaseStructureTreeItem[]>> {
+  public async getChildren(element?: BaseStructureTreeItem): Promise<BaseStructureTreeItem[]> {
     if (!window.activeTextEditor) {
       return [];
     }
@@ -147,7 +146,9 @@ export default class CodeOutline implements Activatable, TreeDataProvider<BaseSt
   private activeWindowChanged(): void {
     this.logger.debug('[CodeOutline] activeWindowChanged, reparsing');
     this.documentCache = undefined;
-    this._onDidChangeTreeData.fire();
+    if (this._onDidChangeTreeData) {
+      this._onDidChangeTreeData.fire();
+    }
   }
 
   /**

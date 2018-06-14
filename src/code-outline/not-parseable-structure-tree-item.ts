@@ -1,4 +1,4 @@
-import BaseStructureTreeItem from './base-structure-tree-item';
+import { BaseStructureTreeItem } from './base-structure-tree-item';
 
 /**
  * Structure tree item that is used when a document is not parseable (i.e. not typescript)
@@ -7,7 +7,7 @@ import BaseStructureTreeItem from './base-structure-tree-item';
  * @class NotParseableStructureTreeItem
  * @extends {BaseStructureTreeItem}
  */
-export default class NotParseableStructureTreeItem extends BaseStructureTreeItem {
+export class NotParseableStructureTreeItem extends BaseStructureTreeItem {
   constructor() {
     super('File not parseable.');
   }

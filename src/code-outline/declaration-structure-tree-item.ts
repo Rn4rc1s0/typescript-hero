@@ -13,7 +13,7 @@ import { stringTemplate } from 'typescript-parser/utilities/StringTemplate';
 import { CompletionItemKind, ExtensionContext, TreeItemCollapsibleState } from 'vscode';
 
 import { getItemKind } from '../utilities/utility-functions';
-import BaseStructureTreeItem from './base-structure-tree-item';
+import { BaseStructureTreeItem } from './base-structure-tree-item';
 
 const fileTemplate = stringTemplate`./src/assets/icons/declarations/${0}.svg`;
 
@@ -61,7 +61,7 @@ function getDeclarationLabel(declaration: Declaration): string {
  * @class DeclarationStructureTreeItem
  * @extends {BaseStructureTreeItem}
  */
-export default class DeclarationStructureTreeItem extends BaseStructureTreeItem {
+export class DeclarationStructureTreeItem extends BaseStructureTreeItem {
   public get iconPath(): string | undefined {
     switch (getItemKind(this.declaration)) {
       case CompletionItemKind.Class:

@@ -47,7 +47,6 @@ ioc.bind<ImportManagerProvider>(iocSymbols.importManager).toProvider<ImportManag
     return new ImportManager(document, source, parser, config, logger, generatorFactory);
   },
 );
-ioc.bind<DeclarationManager>(iocSymbols.declarationManager).to(DeclarationManager).inSingletonScope();
 
 // Typescript
 ioc.bind<TypescriptParser>(iocSymbols.parser).toConstantValue(new TypescriptParser());

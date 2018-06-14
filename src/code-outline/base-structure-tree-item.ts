@@ -8,7 +8,7 @@ import { Command, TreeItem } from 'vscode';
  * @class BaseStructureTreeItem
  * @extends {TreeItem}
  */
-export default abstract class BaseStructureTreeItem extends TreeItem {
+export abstract class BaseStructureTreeItem extends TreeItem {
   constructor(label: string) {
     super(label);
   }

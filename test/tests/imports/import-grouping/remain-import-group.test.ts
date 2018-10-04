@@ -10,12 +10,11 @@ import {
 import { Uri, workspace } from 'vscode';
 
 import { RemainImportGroup } from '../../../../src/imports/import-grouping';
-import ioc from '../../../../src/ioc';
-import iocSymbols, { TypescriptCodeGeneratorFactory } from '../../../../src/ioc-symbols';
+import { ioc } from '../../../../src/ioc';
+import { iocSymbols, TypescriptCodeGeneratorFactory } from '../../../../src/ioc-symbols';
 import { expect } from '../../setup';
 
 describe('RemainImportGroup', () => {
-
   const rootPath = workspace.workspaceFolders![0].uri.fsPath;
   const fsFile = Uri.file(
     join(rootPath, 'imports', 'import-grouping', 'imports.ts'),
@@ -26,22 +25,27 @@ describe('RemainImportGroup', () => {
 
   before(() => {
     if (!GENERATORS[RemainImportGroup.name]) {
-      GENERATORS[RemainImportGroup.name] = (generatable: Generatable, options: TypescriptGenerationOptions): string => {
+      GENERATORS[RemainImportGroup.name] = (
+        generatable: Generatable,
+        options: TypescriptGenerationOptions,
+      ): string => {
         const gen = new TypescriptCodeGenerator(options);
         const group = generatable as RemainImportGroup;
         if (!group.imports.length) {
           return '';
         }
-        return group.sortedImports
-          .map(imp => gen.generate(imp))
-          .join('\n') + '\n';
+        return (
+          group.sortedImports.map(imp => gen.generate(imp)).join('\n') + '\n'
+        );
       };
     }
   });
 
   before(async () => {
     const parser = ioc.get<TypescriptParser>(iocSymbols.parser);
-    generator = ioc.get<TypescriptCodeGeneratorFactory>(iocSymbols.generatorFactory)(fsFile);
+    generator = ioc.get<TypescriptCodeGeneratorFactory>(
+      iocSymbols.generatorFactory,
+    )(fsFile);
     file = await parser.parseFile(fsFile.fsPath, rootPath);
   });
 
@@ -50,7 +54,9 @@ describe('RemainImportGroup', () => {
   });
 
   it('should process all imports', () => {
-    expect(file.imports.map(i => importGroup.processImport(i))).to.matchSnapshot();
+    expect(
+      file.imports.map(i => importGroup.processImport(i)),
+    ).to.matchSnapshot();
   });
 
   it('should generate the correct typescript (asc)', () => {
@@ -71,5 +77,4 @@ describe('RemainImportGroup', () => {
     }
     expect(generator.generate(importGroup as any)).to.matchSnapshot();
   });
-
 });

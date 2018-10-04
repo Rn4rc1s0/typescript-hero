@@ -14,18 +14,20 @@ import { hook, Instrumenter, Reporter } from 'istanbul';
 import { join, relative } from 'path';
 import { ExtensionContext, Memento } from 'vscode';
 
+declare var global: any;
+
 const remapIstanbul = require('remap-istanbul');
 
 type MatcherFunction = ((file: string) => boolean) & { files?: string[] };
 type Transformer = (code: string, filename: string) => string;
 
 class ContextMock implements ExtensionContext {
-  subscriptions: { dispose(): any }[] = [];
-  workspaceState: Memento;
-  globalState: Memento;
-  extensionPath: string = '';
-  storagePath: string = '';
-  asAbsolutePath(path: string): string {
+  public subscriptions: { dispose(): any }[] = [];
+  public workspaceState: Memento = undefined as any;
+  public globalState: Memento = undefined as any;
+  public extensionPath: string = '';
+  public storagePath: string = '';
+  public asAbsolutePath(path: string): string {
     return relative(global['rootPath'], path);
   }
 }
@@ -61,13 +63,18 @@ function reportCoverage(
 ): void {
   (hook as any).unhookRequire();
 
-  if (typeof global[coverageVariable] === 'undefined' || Object.keys(global[coverageVariable]).length === 0) {
-    console.error('No coverage information was collected, exit without writing coverage information');
+  if (
+    typeof global[coverageVariable] === 'undefined' ||
+    Object.keys(global[coverageVariable]).length === 0
+  ) {
+    console.error(
+      'No coverage information was collected, exit without writing coverage information',
+    );
     return;
   }
   const coverage = global[coverageVariable];
 
-  for (const file of (matchFunction.files || [])) {
+  for (const file of matchFunction.files || []) {
     if (coverage[file]) {
       continue;
     }
@@ -87,7 +94,7 @@ function reportCoverage(
   writeFileSync(coverageFile, JSON.stringify(coverage), 'utf8');
 
   const remappedCollector = remapIstanbul.remap(coverage, {
-    warn: () => { },
+    warn: () => {},
   });
 
   const reporter = new Reporter(undefined, coverageDir);
@@ -97,12 +104,18 @@ function reportCoverage(
   });
 }
 
-testRunner.run = (testRoot: string, callback: (error: Error | null) => void) => {
+testRunner.run = (
+  testRoot: string,
+  callback: (error: Error | null) => void,
+) => {
   if (process.env.CI || process.env.COVERAGE) {
     const coverageVariable = `$$cov_${new Date().getTime()}$$`;
     const sourceRoot = join(testRoot, '../../src');
-    const sourceFiles = glob.sync('**/**.js', { cwd: sourceRoot, ignore: ['ioc*.js'] });
-    const fileMap = {};
+    const sourceFiles = glob.sync('**/**.js', {
+      cwd: sourceRoot,
+      ignore: ['ioc*.js'],
+    });
+    const fileMap: { [path: string]: boolean } = {};
     const instrumenter = new Instrumenter({ coverageVariable });
 
     for (const file of sourceFiles) {

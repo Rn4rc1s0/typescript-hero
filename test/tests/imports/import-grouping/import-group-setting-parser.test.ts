@@ -1,5 +1,6 @@
 import {
   ImportGroupIdentifierInvalidError,
+  ImportGroupOrder,
   ImportGroupSettingParser,
   KeywordImportGroup,
   RegexImportGroup,
@@ -7,15 +8,18 @@ import {
 import { expect } from '../../setup';
 
 describe('ImportGroupSettingParser', () => {
-
   it('should parse a simple keyword', () => {
-    const result = ImportGroupSettingParser.parseSetting('Workspace') as KeywordImportGroup;
+    const result = ImportGroupSettingParser.parseSetting(
+      'Workspace',
+    ) as KeywordImportGroup;
 
     expect(result).to.matchSnapshot();
   });
 
   it('should parse a simple regex', () => {
-    const result = ImportGroupSettingParser.parseSetting('/foobar/') as RegexImportGroup;
+    const result = ImportGroupSettingParser.parseSetting(
+      '/foobar/',
+    ) as RegexImportGroup;
 
     expect(result).to.matchSnapshot();
   });
@@ -23,7 +27,7 @@ describe('ImportGroupSettingParser', () => {
   it('should parse a complex keyword pattern', () => {
     const result = ImportGroupSettingParser.parseSetting({
       identifier: 'Workspace',
-      order: 'desc',
+      order: ImportGroupOrder.Desc,
     }) as KeywordImportGroup;
 
     expect(result).to.matchSnapshot();
@@ -32,7 +36,7 @@ describe('ImportGroupSettingParser', () => {
   it('should parse a complex regex pattern', () => {
     const result = ImportGroupSettingParser.parseSetting({
       identifier: '/foobar/',
-      order: 'desc',
+      order: ImportGroupOrder.Desc,
     }) as RegexImportGroup;
 
     expect(result).to.matchSnapshot();
@@ -57,9 +61,10 @@ describe('ImportGroupSettingParser', () => {
   });
 
   it('should parse a complex regex', () => {
-    const result = ImportGroupSettingParser.parseSetting('/(@angular|react)/core/(.*)/');
+    const result = ImportGroupSettingParser.parseSetting(
+      '/(@angular|react)/core/(.*)/',
+    );
 
     expect(result).to.matchSnapshot();
   });
-
 });

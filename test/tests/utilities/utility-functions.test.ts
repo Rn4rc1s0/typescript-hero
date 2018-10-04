@@ -3,8 +3,8 @@ import { TypescriptParser } from 'typescript-parser';
 import { workspace } from 'vscode';
 
 import { ImportGroupKeyword, KeywordImportGroup, RegexImportGroup } from '../../../src/imports/import-grouping';
-import ioc from '../../../src/ioc';
-import iocSymbols from '../../../src/ioc-symbols';
+import { ioc } from '../../../src/ioc';
+import { iocSymbols } from '../../../src/ioc-symbols';
 import {
   getImportInsertPosition,
   importGroupSortForPrecedence,
@@ -13,11 +13,9 @@ import {
 import { expect } from '../setup';
 
 describe('utility functions', () => {
-
   describe('getImportInsertPosition()', () => {
-
     class MockDocument {
-      constructor(private documentText: string) { }
+      constructor(private documentText: string) {}
 
       public getText(): string {
         return this.documentText;
@@ -38,7 +36,9 @@ describe('utility functions', () => {
 
     it('should return correct position for commented file', () => {
       const pos = getImportInsertPosition({
-        document: new MockDocument('    // This is a file header\nStart of file\n'),
+        document: new MockDocument(
+          '    // This is a file header\nStart of file\n',
+        ),
       } as any);
       expect(pos).to.matchSnapshot();
     });
@@ -84,11 +84,9 @@ describe('utility functions', () => {
       } as any);
       expect(pos).to.matchSnapshot();
     });
-
   });
 
   describe('importGroupSortForPrecedence', () => {
-
     it('should prioritize regexes, leaving original order untouched besides that', () => {
       const initialList = [
         new KeywordImportGroup(ImportGroupKeyword.Modules),
@@ -107,7 +105,6 @@ describe('utility functions', () => {
         'Regex Import Groups should appear first (and that should be the only change)',
       );
     });
-
   });
 
   describe('importSortByFirstSpecifier', () => {
@@ -116,11 +113,7 @@ describe('utility functions', () => {
 
     it('should sort according to first specifier/alias, falling back to module path', async () => {
       const file = await parser.parseFile(
-        join(
-          rootPath,
-          'utilities',
-          'imports-for-specifier-sort.ts',
-        ),
+        join(rootPath, 'utilities', 'imports-for-specifier-sort.ts'),
         rootPath,
       );
 
@@ -128,5 +121,4 @@ describe('utility functions', () => {
       expect(result.map(i => i.libraryName)).to.matchSnapshot();
     });
   });
-
 });

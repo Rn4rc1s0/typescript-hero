@@ -4,36 +4,36 @@ import { Container, interfaces } from 'inversify';
 import { TypescriptCodeGenerator, TypescriptParser } from 'typescript-parser';
 import { ExtensionContext, TextDocument, Uri } from 'vscode';
 
-import Activatable from './activatable';
-import Configuration from './configuration';
+import { Activatable } from './activatable';
+import { Configuration } from './configuration';
 import { ImportManager, ImportOrganizer } from './imports';
 import { ImportManagerProvider, iocSymbols, TypescriptCodeGeneratorFactory } from './ioc-symbols';
-import TypescriptHero from './typescript-hero';
-import winstonLogger, { Logger } from './utilities/logger';
+import { TypescriptHero } from './typescript-hero';
+import { Logger, winstonLogger } from './utilities/logger';
 import { getScriptKind } from './utilities/utility-functions';
 
-const ioc = new Container();
+const iocContainer = new Container();
 
 // Entry point
-ioc
+iocContainer
   .bind(TypescriptHero)
   .to(TypescriptHero)
   .inSingletonScope();
 
 // Activatables
-ioc
+iocContainer
   .bind<Activatable>(iocSymbols.activatables)
   .to(ImportOrganizer)
   .inSingletonScope();
 
 // Configuration
-ioc
+iocContainer
   .bind<Configuration>(iocSymbols.configuration)
   .to(Configuration)
   .inSingletonScope();
 
 // Logging
-ioc
+iocContainer
   .bind<Logger>(iocSymbols.logger)
   .toDynamicValue((context: interfaces.Context) => {
     const extContext = context.container.get<ExtensionContext>(
@@ -47,17 +47,15 @@ ioc
   .inSingletonScope();
 
 // Managers
-ioc
+iocContainer
   .bind<ImportManagerProvider>(iocSymbols.importManager)
-  .toProvider<ImportManager>(context => async (document: TextDocument) => {
-    const parser = context.container.get<TypescriptParser>(iocSymbols.parser);
-    const config = context.container.get<Configuration>(
-      iocSymbols.configuration,
+  .toProvider<ImportManager>(c => async (document: TextDocument) => {
+    const parser = c.container.get<TypescriptParser>(iocSymbols.parser);
+    const config = c.container.get<Configuration>(iocSymbols.configuration);
+    const logger = c.container.get<Logger>(iocSymbols.logger);
+    const generatorFactory = c.container.get<TypescriptCodeGeneratorFactory>(
+      iocSymbols.generatorFactory,
     );
-    const logger = context.container.get<Logger>(iocSymbols.logger);
-    const generatorFactory = context.container.get<
-      TypescriptCodeGeneratorFactory
-    >(iocSymbols.generatorFactory);
     const source = await parser.parseSource(
       document.getText(),
       getScriptKind(document.fileName),
@@ -73,10 +71,10 @@ ioc
   });
 
 // Typescript
-ioc
+iocContainer
   .bind<TypescriptParser>(iocSymbols.parser)
   .toConstantValue(new TypescriptParser());
-ioc
+iocContainer
   .bind<TypescriptCodeGeneratorFactory>(iocSymbols.generatorFactory)
   .toFactory<TypescriptCodeGenerator>((context: interfaces.Context) => {
     return (resource: Uri) => {
@@ -89,4 +87,4 @@ ioc
     };
   });
 
-export default ioc;
+export const ioc = iocContainer;

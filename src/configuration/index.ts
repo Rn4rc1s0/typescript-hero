@@ -8,7 +8,7 @@ import { ImportsConfig } from './imports-config';
 const sectionKey = 'typescriptHero';
 
 @injectable()
-export default class Configuration {
+export class Configuration {
   public readonly imports: ImportsConfig = new ImportsConfig();
 
   private readonly _configurationChanged: EventEmitter<

@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { commands, ExtensionContext, TextDocumentWillSaveEvent, window, workspace } from 'vscode';
 
-import Activatable from '../activatable';
-import Configuration from '../configuration';
+import { Activatable } from '../activatable';
+import { Configuration } from '../configuration';
 import { ImportManagerProvider, iocSymbols } from '../ioc-symbols';
 import { Logger } from '../utilities/logger';
 

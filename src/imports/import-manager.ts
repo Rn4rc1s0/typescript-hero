@@ -14,7 +14,7 @@ import {
 } from 'typescript-parser';
 import { Position, Range, TextDocument, TextEdit, window, workspace, WorkspaceEdit } from 'vscode';
 
-import Configuration from '../configuration';
+import { Configuration } from '../configuration';
 import { TypescriptCodeGeneratorFactory } from '../ioc-symbols';
 import { Logger } from '../utilities/logger';
 import {

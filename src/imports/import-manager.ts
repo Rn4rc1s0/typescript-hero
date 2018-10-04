@@ -66,10 +66,10 @@ export function importRange(document: TextDocument, start?: number, end?: number
  * @export
  * @class ImportManager
  */
-export default class ImportManager {
-  private importGroups: ImportGroup[];
+export class ImportManager {
+  private importGroups: ImportGroup[] = [];
   private imports: Import[] = [];
-  private organize: boolean;
+  private organize: boolean = false;
 
   private get rootPath(): string | undefined {
     const rootFolder = workspace.getWorkspaceFolder(this.document.uri);

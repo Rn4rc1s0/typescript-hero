@@ -131,44 +131,17 @@
   "contributes": {
     "commands": [
       {
-        "command": "typescriptHero.index.addImport",
-        "title": "TS Hero: Add an import to current file"
-      },
-      {
-        "command": "typescriptHero.index.addImportUnderCursor",
-        "title": "TS Hero: Adds the current symbol under the cursor as an import to current file"
-      },
-      {
         "command": "typescriptHero.imports.organize",
         "title": "TS Hero: Organize imports (sort and remove unused)"
       }
     ],
     "keybindings": [
       {
-        "command": "typescriptHero.index.addImport",
-        "key": "ctrl+shift+i",
-        "when": "editorTextFocus"
-      },
-      {
-        "command": "typescriptHero.index.addImportUnderCursor",
-        "key": "ctrl+alt+i",
-        "when": "editorTextFocus"
-      },
-      {
         "command": "typescriptHero.imports.organize",
         "key": "ctrl+alt+o",
         "when": "editorTextFocus"
       }
     ],
-    "views": {
-      "explorer": [
-        {
-          "id": "codeOutline",
-          "name": "Code outline",
-          "when": "config.typescriptHero.codeOutline.enabled != false"
-        }
-      ]
-    },
     "configuration": {
       "title": "TypeScript Hero",
       "properties": {
@@ -181,21 +154,6 @@
           ],
           "default": "warn",
           "description": "Defines the log output level in the output window. In the log file, it's always info or debug.",
-          "scope": "window"
-        },
-        "typescriptHero.codeCompletion.completionSortMode": {
-          "enum": [
-            "default",
-            "bottom"
-          ],
-          "default": "default",
-          "description": "Defines the sortmode of the code completion in intellisense (bottom means sorted to bottom).",
-          "scope": "resource"
-        },
-        "typescriptHero.codeOutline.enabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "Defines if the code outline feature (and window) are enabled or not.",
           "scope": "window"
         },
         "typescriptHero.imports.insertSpaceBeforeAndAfterImportBraces": {
@@ -343,32 +301,6 @@
             "Workspace"
           ],
           "description": "Defines the groups of the imports ordering. Multiple groups possible, see readme for instructions.",
-          "scope": "resource"
-        },
-        "typescriptHero.index.workspaceIgnorePatterns": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "uniqueItems": true,
-          "default": [
-            "**/build/**/*",
-            "**/out/**/*",
-            "**/dist/**/*"
-          ],
-          "description": "Defines partial pathes (globs) that are ignored during indexing of the **workspace**.",
-          "scope": "resource"
-        },
-        "typescriptHero.index.moduleIgnorePatterns": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "uniqueItems": true,
-          "default": [
-            "**/node_modules/**/*"
-          ],
-          "description": "Defines partial pathes (globs) that are ignored during indexing of the **node_modules**. This patterns are attached to the node_module/<name> of each found module.",
           "scope": "resource"
         }
       }
